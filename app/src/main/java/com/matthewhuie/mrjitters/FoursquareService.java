@@ -2,7 +2,7 @@ package com.matthewhuie.mrjitters;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
-import retrofit2.http.Query;
+import retrofit2.http.Path;
 
 public interface FoursquareService {
 
@@ -10,9 +10,7 @@ public interface FoursquareService {
     final String clientID = "GC1GONEPBAOOZTVGAPVLNTPKXCU4RMY0N5DFEHFTZKWHFPTT";
     final String clientSecret = "QZI3RNOYAPAN1R0LP11LDIUYQTRSF3LO2UPSVCMIEDNVC5AC";
 
-    @GET("search/recommendations?client_id=" + clientID + "&client_secret=" + clientSecret + "&v=20161101&limit=1&sortByDistance=true")
-    Call<FoursquareJSON> snapToPlace(@Query("ll") String ll, @Query("llAcc") double llAcc);
+    @GET("venues/search?client_id=" + clientID + "&client_secret=" + clientSecret + "&v=20161101&intent=checkin&limit=1&radius=4000&ll={ll}")
+    Call<Venue> snapToPlace(@Path("ll") String ll);
 
-    @GET("search/recommendations?client_id=" + clientID + "&client_secret=" + clientSecret + "&v=20161101&intent=coffee")
-    Call<FoursquareJSON> searchCoffee(@Query("ll") String ll, @Query("llAcc") double llAcc);
 }
