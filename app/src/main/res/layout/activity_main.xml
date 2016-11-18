@@ -16,13 +16,15 @@
         android:layout_height="128dp"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/mrjitters" />
+        android:id="@+id/imageView"
+        android:onClick="gotoPlacePicker" />
 
     <ImageView
         android:src="@drawable/pbf"
         android:layout_height="wrap_content"
-        android:id="@+id/pbf"
-        android:layout_width="200dp"
+        android:id="@+id/imageView2"
+        android:layout_marginBottom="30dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_width="200dp" />
 </RelativeLayout>
