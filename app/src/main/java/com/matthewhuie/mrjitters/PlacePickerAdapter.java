@@ -1,76 +1,47 @@
 package com.matthewhuie.mrjitters;
 
-import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Iterator;
 import java.util.List;
 
 public class PlacePickerAdapter extends RecyclerView.Adapter<PlacePickerAdapter.ViewHolder> {
 
-    private List<FoursquareResults> results;
+    private List<FoursquareVenue> venues;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView name;
-        TextView address;
-        TextView rating;
-        TextView distance;
-        String id;
-        double latitude;
-        double longitude;
+        public TextView venuename;
 
         public ViewHolder(View v) {
             super(v);
-            v.setOnClickListener(this);
-
-            name = (TextView)v.findViewById(R.id.placePickerItemName);
-            address = (TextView)v.findViewById(R.id.placePickerItemAddress);
-            rating = (TextView)v.findViewById(R.id.placePickerItemRating);
-            distance = (TextView)v.findViewById(R.id.placePickerItemDistance);
-        }
-
-        @Override
-        public void onClick(View v) {
-            Context context = name.getContext();
-            Intent i = new Intent(context, MapsActivity.class);
-            i.putExtra("name", name.getText());
-            i.putExtra("ID", id);
-            i.putExtra("latitude", latitude);
-            i.putExtra("longitude", longitude);
-            context.startActivity(i);
+            venuename = (TextView)v.findViewById(R.id.placePickerItemText);
         }
     }
 
-    public PlacePickerAdapter(List<FoursquareResults> results) {
-        this.results = results;
-
+    public PlacePickerAdapter(List<FoursquareVenue> venues) {
+        this.venues = venues;
     }
 
     @Override
     public PlacePickerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_place_picker, parent, false);
+
         return new ViewHolder(v);
     }
 
+    // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.name.setText(results.get(position).venue.name);
-        holder.address.setText(results.get(position).venue.location.address);
-        holder.rating.setText(Double.toString(results.get(position).venue.rating) + "⭐");
-        holder.distance.setText(Integer.toString(results.get(position).venue.location.distance) + "m");
-
-        holder.id = results.get(position).venue.id;
-        holder.latitude = results.get(position).venue.location.lat;
-        holder.longitude = results.get(position).venue.location.lng;
+        holder.venuename.setText(venues.get(position).name);
     }
 
     @Override
     public int getItemCount() {
-        return results.size();
+        return venues.size();
     }
 }
