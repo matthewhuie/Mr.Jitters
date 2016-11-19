@@ -1,6 +1,6 @@
 package com.matthewhuie.mrjitters;
 
-public class Venue {
+public class FoursquareVenue {
 
     String id;
     String name;
@@ -12,5 +12,4 @@ public class Venue {
     public String toString() {
         return name;
     }
-
 }
