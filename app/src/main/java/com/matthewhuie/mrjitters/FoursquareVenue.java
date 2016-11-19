@@ -4,7 +4,12 @@ public class FoursquareVenue {
 
     String id;
     String name;
+    String address;
     double rating;
     int distance;
-    FoursquareLocation location;
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

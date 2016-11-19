@@ -12,21 +12,19 @@
     android:orientation="vertical">
 
     <TextView
+        android:text="TextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
         android:id="@+id/snapToPlace"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:textAlignment="center"
-        android:padding="16dp"
-        android:textSize="16sp"
-        android:fontFamily="sans-serif" />
+        android:textAlignment="center" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/coffeeList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:padding="8dp" />
+        android:layout_centerHorizontal="true" />
 </LinearLayout>
