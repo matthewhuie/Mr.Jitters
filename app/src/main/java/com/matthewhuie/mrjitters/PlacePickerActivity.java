@@ -17,7 +17,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
-import java.util.Iterator;
 import java.util.List;
 
 import retrofit2.Call;
@@ -53,6 +52,16 @@ public class PlacePickerActivity extends Activity implements GoogleApiClient.Con
             .addOnConnectionFailedListener(this)
             .addApi(LocationServices.API)
             .build();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -108,16 +117,6 @@ public class PlacePickerActivity extends Activity implements GoogleApiClient.Con
                 public void onFailure(Call<FoursquareJSON> call, Throwable t) {}
             });
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
