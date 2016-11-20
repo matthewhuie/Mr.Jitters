@@ -121,14 +121,14 @@ public class PlacePickerActivity extends Activity implements GoogleApiClient.Con
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
         mGoogleApiClient.connect();
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onPause() {
+        super.onPause();
         mGoogleApiClient.disconnect();
     }
 
