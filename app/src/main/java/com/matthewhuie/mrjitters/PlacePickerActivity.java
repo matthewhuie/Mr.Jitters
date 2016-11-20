@@ -6,9 +6,11 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -27,24 +29,24 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class PlacePickerActivity extends Activity implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
-    GoogleApiClient mGoogleApiClient;
-    double userLatitude;
-    double userLongitude;
-    double userLLAcc;
-    TextView snapToPlace;
-    RecyclerView placePicker;
-    RecyclerView.LayoutManager placePickerManager;
-    RecyclerView.Adapter placePickerAdapter;
+    private GoogleApiClient mGoogleApiClient;
+    private TextView snapToPlace;
+    private RecyclerView placePicker;
+    private RecyclerView.LayoutManager placePickerManager;
+    private RecyclerView.Adapter placePickerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_picker);
+        getActionBar().setHomeButtonEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
 
         snapToPlace = (TextView)findViewById(R.id.snapToPlace);
         placePicker = (RecyclerView)findViewById(R.id.coffeeList);
         placePicker.setHasFixedSize(true);
-        placePicker.setLayoutManager(new LinearLayoutManager(this));
+        placePickerManager = new LinearLayoutManager(this);
+        placePicker.setLayoutManager(placePickerManager);
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
             .addConnectionCallbacks(this)
@@ -55,6 +57,10 @@ public class PlacePickerActivity extends Activity implements GoogleApiClient.Con
 
     @Override
     public void onConnected(Bundle connectionHint) {
+        double userLatitude;
+        double userLongitude;
+        double userLLAcc;
+
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[] { android.Manifest.permission.ACCESS_FINE_LOCATION }, 0);
         }
@@ -76,23 +82,25 @@ public class PlacePickerActivity extends Activity implements GoogleApiClient.Con
                 public void onResponse(Call<FoursquareJSON> call, Response<FoursquareJSON> response) {
                     FoursquareJSON fjson = response.body();
                     FoursquareResponse fr = fjson.response;
-                    List<FoursquareVenue> venues = fr.venues;
-                    FoursquareVenue fv = venues.get(0);
-                    snapToPlace.setText("You're at " + fv.toString() + ". Here's some ☕ nearby.");
+                    FoursquareGroup fg = fr.group;
+                    List<FoursquareResults> frs = fg.results;
+                    FoursquareVenue fv = frs.get(0).venue;
+                    snapToPlace.setText("You're at " + fv.name + ". Here's some ☕ nearby.");
                 }
 
                 @Override
                 public void onFailure(Call<FoursquareJSON> call, Throwable t) {}
             });
 
-            Call<FoursquareJSON> cCall = foursquare.coffee(userLatitude + "," + userLongitude, userLLAcc);
+            Call<FoursquareJSON> cCall = foursquare.searchCoffee(userLatitude + "," + userLongitude, userLLAcc);
             cCall.enqueue(new Callback<FoursquareJSON>() {
                 @Override
                 public void onResponse(Call<FoursquareJSON> call, Response<FoursquareJSON> response) {
                     FoursquareJSON fjson = response.body();
                     FoursquareResponse fr = fjson.response;
-                    List<FoursquareVenue> venues = fr.venues;
-                    placePickerAdapter = new PlacePickerAdapter(venues);
+                    FoursquareGroup fg = fr.group;
+                    List<FoursquareResults> frs = fg.results;
+                    placePickerAdapter = new PlacePickerAdapter(frs);
                     placePicker.setAdapter(placePickerAdapter);
                 }
 
@@ -103,7 +111,14 @@ public class PlacePickerActivity extends Activity implements GoogleApiClient.Con
     }
 
     @Override
-    public void onConnectionSuspended(int i) {}
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     protected void onStart() {
@@ -116,6 +131,9 @@ public class PlacePickerActivity extends Activity implements GoogleApiClient.Con
         super.onStop();
         mGoogleApiClient.disconnect();
     }
+
+    @Override
+    public void onConnectionSuspended(int i) {}
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {}
