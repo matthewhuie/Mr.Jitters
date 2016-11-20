@@ -61,7 +61,7 @@ public class PlacePickerAdapter extends RecyclerView.Adapter<PlacePickerAdapter.
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.name.setText(results.get(position).venue.name);
         holder.address.setText(results.get(position).venue.location.address);
-        holder.rating.setText(Double.toString(results.get(position).venue.rating));
+        holder.rating.setText(Double.toString(results.get(position).venue.rating) + "⭐");
         holder.distance.setText(Integer.toString(results.get(position).venue.location.distance) + "m");
 
         holder.id = results.get(position).venue.id;
