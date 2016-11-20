@@ -3,11 +3,8 @@ package com.matthewhuie.mrjitters;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.transition.Slide;
-import android.transition.TransitionInflater;
-import android.view.Gravity;
 import android.view.View;
-import android.view.Window;
+import android.view.animation.AnimationUtils;
 
 public class MainActivity extends Activity {
 
@@ -18,6 +15,7 @@ public class MainActivity extends Activity {
     }
 
     public void gotoPlacePicker(View view) {
+        view.startAnimation(AnimationUtils.loadAnimation(this, R.anim.click));
         Intent i = new Intent(getApplicationContext(), PlacePickerActivity.class);
         startActivity(i);
     }
