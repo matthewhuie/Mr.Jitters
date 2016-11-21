@@ -3,8 +3,9 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:minHeight="64dp"
     android:background="?android:attr/selectableItemBackground"
-    android:padding="8dp">
+    android:padding="16dp">
 
     <TextView
         android:id="@+id/placePickerItemName"
@@ -12,30 +13,30 @@
         android:layout_width="wrap_content"
         android:textStyle="bold"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true" />
+        android:layout_alignParentLeft="true"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/placePickerItemAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/placePickerItemName" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true" />
 
     <TextView
         android:id="@+id/placePickerItemRating"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/placePickerItemDistance"
-        android:layout_marginRight="24dp"
-        android:textSize="20sp" />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/placePickerItemDistance"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:textSize="20sp" />
+        android:textSize="12sp" />
 
 </RelativeLayout>
