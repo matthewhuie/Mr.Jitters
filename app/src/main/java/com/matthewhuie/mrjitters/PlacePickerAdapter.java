@@ -74,7 +74,7 @@ public class PlacePickerAdapter extends RecyclerView.Adapter<PlacePickerAdapter.
 
         holder.name.setText(results.get(position).venue.name);
         holder.address.setText(results.get(position).venue.location.address);
-        holder.rating.setText(Double.toString(ratingRaw) + "⭐");
+        holder.rating.setText(Double.toString(ratingRaw));
         holder.distance.setText(Integer.toString(results.get(position).venue.location.distance) + "m");
 
         holder.id = results.get(position).venue.id;
