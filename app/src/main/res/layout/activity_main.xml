@@ -16,7 +16,7 @@
         android:layout_height="128dp"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/imageView"
+        android:id="@+id/mrjitters"
         android:onClick="gotoPlacePicker" />
 
     <ImageView
