@@ -33,6 +33,9 @@ public class PlacePickerActivity extends Activity implements GoogleApiClient.Con
     private RecyclerView placePicker;
     private RecyclerView.LayoutManager placePickerManager;
     private RecyclerView.Adapter placePickerAdapter;
+    private String foursquareBaseURL = "https://api.foursquare.com/v2/";
+    private String foursquareClientID;
+    private String foursquareClientSecret;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,9 @@ public class PlacePickerActivity extends Activity implements GoogleApiClient.Con
             .addOnConnectionFailedListener(this)
             .addApi(LocationServices.API)
             .build();
+
+        foursquareClientID = getResources().getString(R.string.foursquare_client_id);
+        foursquareClientSecret = getResources().getString(R.string.foursquare_client_secret);
     }
 
     @Override
@@ -80,20 +86,23 @@ public class PlacePickerActivity extends Activity implements GoogleApiClient.Con
             userLLAcc = mLastLocation.getAccuracy();
 
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(FoursquareService.BASE_URL)
+                    .baseUrl(foursquareBaseURL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
             FoursquareService foursquare = retrofit.create(FoursquareService.class);
-            Call<FoursquareJSON> stpCall = foursquare.snapToPlace(userLatitude + "," + userLongitude, userLLAcc);
+            Call<FoursquareJSON> stpCall = foursquare.snapToPlace(
+                    foursquareClientID,
+                    foursquareClientSecret,
+                    userLatitude + "," + userLongitude,
+                    userLLAcc);
             stpCall.enqueue(new Callback<FoursquareJSON>() {
                 @Override
                 public void onResponse(Call<FoursquareJSON> call, Response<FoursquareJSON> response) {
                     FoursquareJSON fjson = response.body();
                     FoursquareResponse fr = fjson.response;
-                    FoursquareGroup fg = fr.group;
-                    List<FoursquareResults> frs = fg.results;
-                    FoursquareVenue fv = frs.get(0).venue;
+                    List<FoursquareVenue> frs = fr.venues;
+                    FoursquareVenue fv = frs.get(0);
                     snapToPlace.setText("You're at " + fv.name + ". Here's some ☕ nearby.");
                 }
 
@@ -101,7 +110,11 @@ public class PlacePickerActivity extends Activity implements GoogleApiClient.Con
                 public void onFailure(Call<FoursquareJSON> call, Throwable t) {}
             });
 
-            Call<FoursquareJSON> cCall = foursquare.searchCoffee(userLatitude + "," + userLongitude, userLLAcc);
+            Call<FoursquareJSON> cCall = foursquare.searchCoffee(
+                    foursquareClientID,
+                    foursquareClientSecret,
+                    userLatitude + "," + userLongitude,
+                    userLLAcc);
             cCall.enqueue(new Callback<FoursquareJSON>() {
                 @Override
                 public void onResponse(Call<FoursquareJSON> call, Response<FoursquareJSON> response) {
