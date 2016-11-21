@@ -2,6 +2,7 @@ package com.matthewhuie.mrjitters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import java.util.List;
 
 public class PlacePickerAdapter extends RecyclerView.Adapter<PlacePickerAdapter.ViewHolder> {
 
+    private Context context;
     private List<FoursquareResults> results;
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -46,9 +48,9 @@ public class PlacePickerAdapter extends RecyclerView.Adapter<PlacePickerAdapter.
         }
     }
 
-    public PlacePickerAdapter(List<FoursquareResults> results) {
+    public PlacePickerAdapter(Context context, List<FoursquareResults> results) {
+        this.context = context;
         this.results = results;
-
     }
 
     @Override
@@ -59,9 +61,20 @@ public class PlacePickerAdapter extends RecyclerView.Adapter<PlacePickerAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        double ratingRaw = results.get(position).venue.rating;
+        if (ratingRaw <= 2.5) {
+            holder.rating.setBackgroundColor(ContextCompat.getColor(context, R.color.FSQStrawberry));
+        } else if (ratingRaw <= 5.0) {
+            holder.rating.setBackgroundColor(ContextCompat.getColor(context, R.color.FSQOrange));
+        } else if (ratingRaw <= 7.5) {
+            holder.rating.setBackgroundColor(ContextCompat.getColor(context, R.color.FSQLime));
+        } else if (ratingRaw <= 10.0) {
+            holder.rating.setBackgroundColor(ContextCompat.getColor(context, R.color.FSQKale));
+        }
+
         holder.name.setText(results.get(position).venue.name);
         holder.address.setText(results.get(position).venue.location.address);
-        holder.rating.setText(Double.toString(results.get(position).venue.rating) + "⭐");
+        holder.rating.setText(Double.toString(ratingRaw) + "⭐");
         holder.distance.setText(Integer.toString(results.get(position).venue.location.distance) + "m");
 
         holder.id = results.get(position).venue.id;

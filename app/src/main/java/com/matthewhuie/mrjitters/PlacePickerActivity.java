@@ -1,3 +1,14 @@
+/**
+ * Filename: PlacePickerActivity.java
+ * Author: Matthew Huie
+ *
+ * PlacePickerActivity represents the location view of the app.  This Activity will obtain the user's
+ * current location via Google APIs.  Also, this activity will make appropriate calls to the
+ * Foursquare API using Retrofit 2, and parsing the JSON responses using GSON.  The top
+ * TextView will display the user's current location, and the bottom RecyclerView will display nearby
+ * coffee shops.
+ */
+
 package com.matthewhuie.mrjitters;
 
 import android.app.Activity;
@@ -26,9 +37,10 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class PlacePickerActivity extends Activity implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+public class PlacePickerActivity extends Activity
+        implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
+    // The client object for connecting to the Google API.
     private GoogleApiClient mGoogleApiClient;
     private TextView snapToPlace;
     private RecyclerView placePicker;
@@ -124,7 +136,7 @@ public class PlacePickerActivity extends Activity implements GoogleApiClient.Con
                     FoursquareResponse fr = fjson.response;
                     FoursquareGroup fg = fr.group;
                     List<FoursquareResults> frs = fg.results;
-                    placePickerAdapter = new PlacePickerAdapter(frs);
+                    placePickerAdapter = new PlacePickerAdapter(getApplicationContext(), frs);
                     placePicker.setAdapter(placePickerAdapter);
                 }
 

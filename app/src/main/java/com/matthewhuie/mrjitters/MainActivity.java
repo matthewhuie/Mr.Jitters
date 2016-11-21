@@ -2,7 +2,8 @@
  * Filename: MainActivity.java
  * Author: Matthew Huie
  *
- * MainActivity represents the initial view of the app.
+ * MainActivity represents the initial view of the app.  This Activity has a single ImageView which
+ * is used to transition the user to the next Activity.
  */
 
 package com.matthewhuie.mrjitters;
@@ -26,6 +27,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Attaches a listener for animation/transition to the Mr. Jitters logo.
         logo = (ImageView)findViewById(R.id.mrjitters);
         logo.setOnClickListener(this);
     }
@@ -33,6 +35,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onResume() {
         super.onResume();
+
+        // Adds a jitter animation to the Mr. Jitters logo.
         RotateAnimation jitter = new RotateAnimation(0, 2, 50, 50);
         jitter.setDuration(10);
         jitter.setRepeatCount(Animation.INFINITE);
@@ -42,7 +46,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
+
+        // Defines a new alpha/scale animation
         Animation click = AnimationUtils.loadAnimation(this, R.anim.click);
+
+        // Defines a listener to transition to the PlacePickerActivity after the animation completes
         click.setAnimationListener(new Animation.AnimationListener() {
 
             @Override
@@ -57,6 +65,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 startActivity(i);
             }
         });
+
+        // Attaches the alpha/scale animation to the view
         view.startAnimation(click);
     }
 }

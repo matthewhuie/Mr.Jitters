@@ -3,4 +3,8 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="FSQStrawberry">#E6092C</color>
+    <color name="FSQOrange">#FF9600</color>
+    <color name="FSQLime">#C5DE35</color>
+    <color name="FSQKale">#00B551</color>
 </resources>
