@@ -14,6 +14,7 @@ public class FoursquareResponse {
 
     // A group object within the response.
     FoursquareGroup group;
+    List<FoursquareVenue> venues = new ArrayList<>();
 
     // A venues list within the response.
     List<FoursquareVenue> venues = new ArrayList<>();
