@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
@@ -31,7 +32,7 @@ public class PlacePickerActivity extends Activity implements GoogleApiClient.Con
     private GoogleApiClient mGoogleApiClient;
     private TextView snapToPlace;
     private RecyclerView placePicker;
-    private RecyclerView.LayoutManager placePickerManager;
+    private LinearLayoutManager placePickerManager;
     private RecyclerView.Adapter placePickerAdapter;
     private String foursquareBaseURL = "https://api.foursquare.com/v2/";
     private String foursquareClientID;
@@ -49,6 +50,7 @@ public class PlacePickerActivity extends Activity implements GoogleApiClient.Con
         placePicker.setHasFixedSize(true);
         placePickerManager = new LinearLayoutManager(this);
         placePicker.setLayoutManager(placePickerManager);
+        placePicker.addItemDecoration(new DividerItemDecoration(placePicker.getContext(), placePickerManager.getOrientation()));
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
             .addConnectionCallbacks(this)
