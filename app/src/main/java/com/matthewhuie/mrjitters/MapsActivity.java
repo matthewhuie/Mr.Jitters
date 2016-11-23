@@ -1,3 +1,11 @@
+/**
+ * Filename: MapActivity.java
+ * Author: Matthew Huie
+ *
+ * MapActivity represents a map view of a specific venue from PlacePickerActivity.  This activity will
+ * allow a user to link back to the Foursquare venue page.
+ */
+
 package com.matthewhuie.mrjitters;
 
 import android.content.Intent;
@@ -15,9 +23,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
+public class MapsActivity extends FragmentActivity
+        implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
 
+    // The Google Maps object.
     private GoogleMap mMap;
+
+    // The details of the venue that is being displayed.
     private String venueID;
     private String venueName;
     private double venueLatitude;
@@ -34,12 +46,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+        // Retrieves venues details from the intent sent from PlacePickerActivity
         Bundle venue = getIntent().getExtras();
         venueID = venue.getString("ID");
         venueName = venue.getString("name");
         venueLatitude = venue.getDouble("latitude");
         venueLongitude = venue.getDouble("longitude");
-
         setTitle(venueName);
     }
 
@@ -57,7 +69,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        // Centers and zooms the map into the selected venue
         LatLng venue = new LatLng(venueLatitude, venueLongitude);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(venue, 16));
+
+        // Creates and displays marker and info window for the venue
         Marker marker = mMap.addMarker(new MarkerOptions()
                 .position(venue)
                 .title(venueName)
@@ -65,11 +81,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         marker.showInfoWindow();
         mMap.setOnInfoWindowClickListener(this);
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(venue, 16));
+
     }
 
     @Override
     public void onInfoWindowClick(Marker marker) {
+
+        // Opens the Foursquare venue page when a user clicks on the info window of the venue
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://foursquare.com/v/" + venueID));
         startActivity(browserIntent);
     }
