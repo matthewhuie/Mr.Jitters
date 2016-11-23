@@ -3,9 +3,14 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="FSQStrawberry">#E6092C</color>
-    <color name="FSQOrange">#FF9600</color>
-    <color name="FSQLime">#C5DE35</color>
-    <color name="FSQKale">#00B551</color>
     <color name="whiteFont">#FFFFFF</color>
+
+    <!-- Referenced from the Foursquare Brand Guide: https://foursquare.com/about/logos -->
+    <color name="FSQStrawberry">#E6092C</color>
+    <color name="FSQMacCheese">#FF6701</color>
+    <color name="FSQOrange">#FF9600</color>
+    <color name="FSQBanana">#FFC800</color>
+    <color name="FSQLime">#C5DE35</color>
+    <color name="FSQGuacamole">#73CF42</color>
+    <color name="FSQKale">#00B551</color>
 </resources>

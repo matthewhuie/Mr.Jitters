@@ -62,14 +62,20 @@ public class PlacePickerAdapter extends RecyclerView.Adapter<PlacePickerAdapter.
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         double ratingRaw = results.get(position).venue.rating;
-        if (ratingRaw <= 2.5) {
-            holder.rating.setBackgroundColor(ContextCompat.getColor(context, R.color.FSQStrawberry));
-        } else if (ratingRaw <= 5.0) {
-            holder.rating.setBackgroundColor(ContextCompat.getColor(context, R.color.FSQOrange));
-        } else if (ratingRaw <= 7.5) {
-            holder.rating.setBackgroundColor(ContextCompat.getColor(context, R.color.FSQLime));
-        } else if (ratingRaw <= 10.0) {
+        if (ratingRaw >= 9.0) {
             holder.rating.setBackgroundColor(ContextCompat.getColor(context, R.color.FSQKale));
+        } else if (ratingRaw >= 8.0) {
+            holder.rating.setBackgroundColor(ContextCompat.getColor(context, R.color.FSQGuacamole));
+        } else if (ratingRaw >= 7.0) {
+            holder.rating.setBackgroundColor(ContextCompat.getColor(context, R.color.FSQLime));
+        } else if (ratingRaw >= 6.0) {
+            holder.rating.setBackgroundColor(ContextCompat.getColor(context, R.color.FSQBanana));
+        } else if (ratingRaw >= 5.0) {
+            holder.rating.setBackgroundColor(ContextCompat.getColor(context, R.color.FSQOrange));
+        } else if (ratingRaw >= 4.0) {
+            holder.rating.setBackgroundColor(ContextCompat.getColor(context, R.color.FSQMacCheese));
+        } else {
+            holder.rating.setBackgroundColor(ContextCompat.getColor(context, R.color.FSQStrawberry));
         }
 
         holder.name.setText(results.get(position).venue.name);

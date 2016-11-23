@@ -42,11 +42,19 @@ public class PlacePickerActivity extends Activity
 
     // The client object for connecting to the Google API.
     private GoogleApiClient mGoogleApiClient;
+
+    // The TextView for displaying the current location.
     private TextView snapToPlace;
+
+    // The RecyclerView and associated objects for displaying the nearby coffee spots.
     private RecyclerView placePicker;
     private LinearLayoutManager placePickerManager;
     private RecyclerView.Adapter placePickerAdapter;
+
+    // The base URL for the Foursquare API.
     private String foursquareBaseURL = "https://api.foursquare.com/v2/";
+
+    // The client ID and client secret for authenticating with the Foursquare API.
     private String foursquareClientID;
     private String foursquareClientSecret;
 
@@ -57,19 +65,24 @@ public class PlacePickerActivity extends Activity
         getActionBar().setHomeButtonEnabled(true);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // The visible TextView and RecyclerView objects.
         snapToPlace = (TextView)findViewById(R.id.snapToPlace);
         placePicker = (RecyclerView)findViewById(R.id.coffeeList);
+
+        // Sets the dimensions, LayoutManager, and dividers for the RecyclerView.
         placePicker.setHasFixedSize(true);
         placePickerManager = new LinearLayoutManager(this);
         placePicker.setLayoutManager(placePickerManager);
         placePicker.addItemDecoration(new DividerItemDecoration(placePicker.getContext(), placePickerManager.getOrientation()));
 
+        // Creates a connection to the Google API for location services.
         mGoogleApiClient = new GoogleApiClient.Builder(this)
             .addConnectionCallbacks(this)
             .addOnConnectionFailedListener(this)
             .addApi(LocationServices.API)
             .build();
 
+        // Gets the stored Foursquare API client ID and client secret from XML
         foursquareClientID = getResources().getString(R.string.foursquare_client_id);
         foursquareClientSecret = getResources().getString(R.string.foursquare_client_secret);
     }
@@ -86,25 +99,32 @@ public class PlacePickerActivity extends Activity
 
     @Override
     public void onConnected(Bundle connectionHint) {
+
+        // The user's current latitude, longitude, and location accuracy.
         double userLatitude;
         double userLongitude;
         double userLLAcc;
 
+        // Checks for location permissions at runtime (required for API >= 23)
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[] { android.Manifest.permission.ACCESS_FINE_LOCATION }, 0);
         }
+
+        // Makes a Google API request for the user's last known location
         Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (mLastLocation != null) {
             userLatitude = mLastLocation.getLatitude();
             userLongitude = mLastLocation.getLongitude();
             userLLAcc = mLastLocation.getAccuracy();
 
+            // Builds Retrofit and FoursquareService objects for calling the Foursquare API and parsing with GSON
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(foursquareBaseURL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
-
             FoursquareService foursquare = retrofit.create(FoursquareService.class);
+
+            // Calls the Foursquare API to snap the user's location to a Foursquare venue
             Call<FoursquareJSON> stpCall = foursquare.snapToPlace(
                     foursquareClientID,
                     foursquareClientSecret,
@@ -113,10 +133,14 @@ public class PlacePickerActivity extends Activity
             stpCall.enqueue(new Callback<FoursquareJSON>() {
                 @Override
                 public void onResponse(Call<FoursquareJSON> call, Response<FoursquareJSON> response) {
+
+                    // Gets the venue object from the JSON response
                     FoursquareJSON fjson = response.body();
                     FoursquareResponse fr = fjson.response;
                     List<FoursquareVenue> frs = fr.venues;
                     FoursquareVenue fv = frs.get(0);
+
+                    // Notifies the user of their current location
                     snapToPlace.setText("You're at " + fv.name + ". Here's some ☕ nearby.");
                 }
 
@@ -124,18 +148,23 @@ public class PlacePickerActivity extends Activity
                 public void onFailure(Call<FoursquareJSON> call, Throwable t) {}
             });
 
-            Call<FoursquareJSON> cCall = foursquare.searchCoffee(
+            // Calls the Foursquare API to explore nearby coffee spots
+            Call<FoursquareJSON> coffeeCall = foursquare.searchCoffee(
                     foursquareClientID,
                     foursquareClientSecret,
                     userLatitude + "," + userLongitude,
                     userLLAcc);
-            cCall.enqueue(new Callback<FoursquareJSON>() {
+            coffeeCall.enqueue(new Callback<FoursquareJSON>() {
                 @Override
                 public void onResponse(Call<FoursquareJSON> call, Response<FoursquareJSON> response) {
+
+                    // Gets the venue object from the JSON response
                     FoursquareJSON fjson = response.body();
                     FoursquareResponse fr = fjson.response;
                     FoursquareGroup fg = fr.group;
                     List<FoursquareResults> frs = fg.results;
+
+                    // Displays the results in the RecyclerView
                     placePickerAdapter = new PlacePickerAdapter(getApplicationContext(), frs);
                     placePicker.setAdapter(placePickerAdapter);
                 }
@@ -149,12 +178,16 @@ public class PlacePickerActivity extends Activity
     @Override
     protected void onResume() {
         super.onResume();
+
+        // Reconnects to the Google API
         mGoogleApiClient.connect();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+
+        // Disconnects from the Google API
         mGoogleApiClient.disconnect();
     }
 
