@@ -24,6 +24,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -108,6 +109,9 @@ public class PlacePickerActivity extends Activity
         // Checks for location permissions at runtime (required for API >= 23)
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[] { android.Manifest.permission.ACCESS_FINE_LOCATION }, 0);
+        } else {
+            Toast.makeText(getApplicationContext(), "Mr. Jitters is missing permissions to access your location!", Toast.LENGTH_LONG).show();
+            finish();
         }
 
         // Makes a Google API request for the user's last known location
@@ -145,7 +149,10 @@ public class PlacePickerActivity extends Activity
                 }
 
                 @Override
-                public void onFailure(Call<FoursquareJSON> call, Throwable t) {}
+                public void onFailure(Call<FoursquareJSON> call, Throwable t) {
+                    Toast.makeText(getApplicationContext(), "Mr. Jitters can't connect to Foursquare's servers!", Toast.LENGTH_LONG).show();
+                    finish();
+                }
             });
 
             // Calls the Foursquare API to explore nearby coffee spots
@@ -170,8 +177,14 @@ public class PlacePickerActivity extends Activity
                 }
 
                 @Override
-                public void onFailure(Call<FoursquareJSON> call, Throwable t) {}
+                public void onFailure(Call<FoursquareJSON> call, Throwable t) {
+                    Toast.makeText(getApplicationContext(), "Mr. Jitters can't connect to Foursquare's servers!", Toast.LENGTH_LONG).show();
+                    finish();
+                }
             });
+        } else {
+            Toast.makeText(getApplicationContext(), "Mr. Jitters can't determine your current location!", Toast.LENGTH_LONG).show();
+            finish();
         }
     }
 
@@ -195,5 +208,8 @@ public class PlacePickerActivity extends Activity
     public void onConnectionSuspended(int i) {}
 
     @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {}
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Toast.makeText(getApplicationContext(), "Mr. Jitters can't connect to Google's servers!", Toast.LENGTH_LONG).show();
+        finish();
+    }
 }
