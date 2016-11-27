@@ -16,7 +16,6 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
@@ -41,21 +40,21 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class PlacePickerActivity extends Activity
         implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    // The client object for connecting to the Google API.
+    // The client object for connecting to the Google API
     private GoogleApiClient mGoogleApiClient;
 
-    // The TextView for displaying the current location.
+    // The TextView for displaying the current location
     private TextView snapToPlace;
 
-    // The RecyclerView and associated objects for displaying the nearby coffee spots.
+    // The RecyclerView and associated objects for displaying the nearby coffee spots
     private RecyclerView placePicker;
     private LinearLayoutManager placePickerManager;
     private RecyclerView.Adapter placePickerAdapter;
 
-    // The base URL for the Foursquare API.
+    // The base URL for the Foursquare API
     private String foursquareBaseURL = "https://api.foursquare.com/v2/";
 
-    // The client ID and client secret for authenticating with the Foursquare API.
+    // The client ID and client secret for authenticating with the Foursquare API
     private String foursquareClientID;
     private String foursquareClientSecret;
 
@@ -66,17 +65,17 @@ public class PlacePickerActivity extends Activity
         getActionBar().setHomeButtonEnabled(true);
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        // The visible TextView and RecyclerView objects.
+        // The visible TextView and RecyclerView objects
         snapToPlace = (TextView)findViewById(R.id.snapToPlace);
         placePicker = (RecyclerView)findViewById(R.id.coffeeList);
 
-        // Sets the dimensions, LayoutManager, and dividers for the RecyclerView.
+        // Sets the dimensions, LayoutManager, and dividers for the RecyclerView
         placePicker.setHasFixedSize(true);
         placePickerManager = new LinearLayoutManager(this);
         placePicker.setLayoutManager(placePickerManager);
         placePicker.addItemDecoration(new DividerItemDecoration(placePicker.getContext(), placePickerManager.getOrientation()));
 
-        // Creates a connection to the Google API for location services.
+        // Creates a connection to the Google API for location services
         mGoogleApiClient = new GoogleApiClient.Builder(this)
             .addConnectionCallbacks(this)
             .addOnConnectionFailedListener(this)
@@ -101,90 +100,83 @@ public class PlacePickerActivity extends Activity
     @Override
     public void onConnected(Bundle connectionHint) {
 
-        // The user's current latitude, longitude, and location accuracy.
-        double userLatitude;
-        double userLongitude;
-        double userLLAcc;
-
         // Checks for location permissions at runtime (required for API >= 23)
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[] { android.Manifest.permission.ACCESS_FINE_LOCATION }, 0);
-        } else {
-            Toast.makeText(getApplicationContext(), "Mr. Jitters is missing permissions to access your location!", Toast.LENGTH_LONG).show();
-            finish();
-        }
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
-        // Makes a Google API request for the user's last known location
-        Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if (mLastLocation != null) {
-            userLatitude = mLastLocation.getLatitude();
-            userLongitude = mLastLocation.getLongitude();
-            userLLAcc = mLastLocation.getAccuracy();
+            // Makes a Google API request for the user's last known location
+            Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
-            // Builds Retrofit and FoursquareService objects for calling the Foursquare API and parsing with GSON
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(foursquareBaseURL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-            FoursquareService foursquare = retrofit.create(FoursquareService.class);
+            if (mLastLocation != null) {
 
-            // Calls the Foursquare API to snap the user's location to a Foursquare venue
-            Call<FoursquareJSON> stpCall = foursquare.snapToPlace(
-                    foursquareClientID,
-                    foursquareClientSecret,
-                    userLatitude + "," + userLongitude,
-                    userLLAcc);
-            stpCall.enqueue(new Callback<FoursquareJSON>() {
-                @Override
-                public void onResponse(Call<FoursquareJSON> call, Response<FoursquareJSON> response) {
+                // The user's current latitude, longitude, and location accuracy
+                String userLL = mLastLocation.getLatitude() + "," +  mLastLocation.getLongitude();
+                double userLLAcc = mLastLocation.getAccuracy();
 
-                    // Gets the venue object from the JSON response
-                    FoursquareJSON fjson = response.body();
-                    FoursquareResponse fr = fjson.response;
-                    List<FoursquareVenue> frs = fr.venues;
-                    FoursquareVenue fv = frs.get(0);
+                // Builds Retrofit and FoursquareService objects for calling the Foursquare API and parsing with GSON
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl(foursquareBaseURL)
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+                FoursquareService foursquare = retrofit.create(FoursquareService.class);
 
-                    // Notifies the user of their current location
-                    snapToPlace.setText("You're at " + fv.name + ". Here's some ☕ nearby.");
-                }
+                // Calls the Foursquare API to snap the user's location to a Foursquare venue
+                Call<FoursquareJSON> stpCall = foursquare.snapToPlace(
+                        foursquareClientID,
+                        foursquareClientSecret,
+                        userLL,
+                        userLLAcc);
+                stpCall.enqueue(new Callback<FoursquareJSON>() {
+                    @Override
+                    public void onResponse(Call<FoursquareJSON> call, Response<FoursquareJSON> response) {
 
-                @Override
-                public void onFailure(Call<FoursquareJSON> call, Throwable t) {
-                    Toast.makeText(getApplicationContext(), "Mr. Jitters can't connect to Foursquare's servers!", Toast.LENGTH_LONG).show();
-                    finish();
-                }
-            });
+                        // Gets the venue object from the JSON response
+                        FoursquareJSON fjson = response.body();
+                        FoursquareResponse fr = fjson.response;
+                        List<FoursquareVenue> frs = fr.venues;
+                        FoursquareVenue fv = frs.get(0);
 
-            // Calls the Foursquare API to explore nearby coffee spots
-            Call<FoursquareJSON> coffeeCall = foursquare.searchCoffee(
-                    foursquareClientID,
-                    foursquareClientSecret,
-                    userLatitude + "," + userLongitude,
-                    userLLAcc);
-            coffeeCall.enqueue(new Callback<FoursquareJSON>() {
-                @Override
-                public void onResponse(Call<FoursquareJSON> call, Response<FoursquareJSON> response) {
+                        // Notifies the user of their current location
+                        snapToPlace.setText("You're at " + fv.name + ". Here's some ☕ nearby.");
+                    }
 
-                    // Gets the venue object from the JSON response
-                    FoursquareJSON fjson = response.body();
-                    FoursquareResponse fr = fjson.response;
-                    FoursquareGroup fg = fr.group;
-                    List<FoursquareResults> frs = fg.results;
+                    @Override
+                    public void onFailure(Call<FoursquareJSON> call, Throwable t) {
+                        Toast.makeText(getApplicationContext(), "Mr. Jitters can't connect to Foursquare's servers!", Toast.LENGTH_LONG).show();
+                        finish();
+                    }
+                });
 
-                    // Displays the results in the RecyclerView
-                    placePickerAdapter = new PlacePickerAdapter(getApplicationContext(), frs);
-                    placePicker.setAdapter(placePickerAdapter);
-                }
+                // Calls the Foursquare API to explore nearby coffee spots
+                Call<FoursquareJSON> coffeeCall = foursquare.searchCoffee(
+                        foursquareClientID,
+                        foursquareClientSecret,
+                        userLL,
+                        userLLAcc);
+                coffeeCall.enqueue(new Callback<FoursquareJSON>() {
+                    @Override
+                    public void onResponse(Call<FoursquareJSON> call, Response<FoursquareJSON> response) {
 
-                @Override
-                public void onFailure(Call<FoursquareJSON> call, Throwable t) {
-                    Toast.makeText(getApplicationContext(), "Mr. Jitters can't connect to Foursquare's servers!", Toast.LENGTH_LONG).show();
-                    finish();
-                }
-            });
-        } else {
-            Toast.makeText(getApplicationContext(), "Mr. Jitters can't determine your current location!", Toast.LENGTH_LONG).show();
-            finish();
+                        // Gets the venue object from the JSON response
+                        FoursquareJSON fjson = response.body();
+                        FoursquareResponse fr = fjson.response;
+                        FoursquareGroup fg = fr.group;
+                        List<FoursquareResults> frs = fg.results;
+
+                        // Displays the results in the RecyclerView
+                        placePickerAdapter = new PlacePickerAdapter(getApplicationContext(), frs);
+                        placePicker.setAdapter(placePickerAdapter);
+                    }
+
+                    @Override
+                    public void onFailure(Call<FoursquareJSON> call, Throwable t) {
+                        Toast.makeText(getApplicationContext(), "Mr. Jitters can't connect to Foursquare's servers!", Toast.LENGTH_LONG).show();
+                        finish();
+                    }
+                });
+            } else {
+                Toast.makeText(getApplicationContext(), "Mr. Jitters can't determine your current location!", Toast.LENGTH_LONG).show();
+                finish();
+            }
         }
     }
 

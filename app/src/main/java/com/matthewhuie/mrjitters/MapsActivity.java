@@ -9,10 +9,12 @@
 package com.matthewhuie.mrjitters;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v4.content.ContextCompat;
 import android.view.MenuItem;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -81,7 +83,12 @@ public class MapsActivity extends FragmentActivity
         marker.showInfoWindow();
         mMap.setOnInfoWindowClickListener(this);
 
+        // Checks for location permissions at runtime (required for API >= 23)
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
+            // Shows the user's current location
+            mMap.setMyLocationEnabled(true);
+        }
     }
 
     @Override
