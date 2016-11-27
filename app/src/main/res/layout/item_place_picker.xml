@@ -14,20 +14,25 @@
         android:textStyle="bold"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:ellipsize="end"
+        android:maxLines="1" />
 
     <TextView
         android:id="@+id/placePickerItemAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/placePickerItemName"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:ellipsize="end"
+        android:maxLines="1" />
 
     <TextView
         android:id="@+id/placePickerItemRating"
         android:layout_height="match_parent"
         android:layout_width="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
         android:textStyle="bold"
         android:textSize="14sp"
@@ -40,7 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toStartOf="@id/placePickerItemRating"
-        android:layout_marginEnd="12dp"
+        android:layout_marginEnd="16dp"
         android:textSize="12sp" />
 
 </RelativeLayout>
