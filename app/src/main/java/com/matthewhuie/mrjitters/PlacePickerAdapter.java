@@ -22,15 +22,15 @@ import java.util.List;
 
 public class PlacePickerAdapter extends RecyclerView.Adapter<PlacePickerAdapter.ViewHolder> {
 
-    // The application context for getting resources.
+    // The application context for getting resources
     private Context context;
 
-    // The list of results from the Foursquare API.
+    // The list of results from the Foursquare API
     private List<FoursquareResults> results;
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        // The venue fields to display.
+        // The venue fields to display
         TextView name;
         TextView address;
         TextView rating;
@@ -53,11 +53,11 @@ public class PlacePickerAdapter extends RecyclerView.Adapter<PlacePickerAdapter.
         @Override
         public void onClick(View v) {
 
-            // Creates an intent to direct the user to a map view.
+            // Creates an intent to direct the user to a map view
             Context context = name.getContext();
             Intent i = new Intent(context, MapsActivity.class);
 
-            // Passes the crucial venue details onto the map view.
+            // Passes the crucial venue details onto the map view
             i.putExtra("name", name.getText());
             i.putExtra("ID", id);
             i.putExtra("latitude", latitude);

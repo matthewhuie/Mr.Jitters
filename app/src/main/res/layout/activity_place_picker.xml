@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:cardview="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_place_picker"
@@ -28,6 +28,5 @@
         android:id="@+id/coffeeList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="64dp"
         android:clipToPadding="false" />
-</RelativeLayout>
+</LinearLayout>

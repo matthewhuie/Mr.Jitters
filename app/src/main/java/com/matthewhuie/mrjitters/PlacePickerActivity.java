@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -137,9 +138,6 @@ public class PlacePickerActivity extends Activity
 
                         // Notifies the user of their current location
                         snapToPlace.setText("You're at " + fv.name + ". Here's some ☕ nearby.");
-
-                        // Resets the RecyclerView under the TextView
-                        placePicker.setPadding(0, snapToPlace.getHeight() + 8, 0, 0);
                     }
 
                     @Override
