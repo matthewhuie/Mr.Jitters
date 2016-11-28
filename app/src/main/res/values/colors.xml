@@ -3,7 +3,8 @@
     <color name="colorPrimary">#79CB00</color>
     <color name="colorPrimaryDark">#6AB916</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="whiteFont">#FFFFFF</color>
+    <color name="white">#FFFFFF</color>
+    <color name="whiteFaded">#E8FFFFFF</color>
 
     <!-- Referenced from the Foursquare Brand Guide: https://foursquare.com/about/logos -->
     <color name="FSQStrawberry">#E6092C</color>

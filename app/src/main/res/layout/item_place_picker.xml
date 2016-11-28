@@ -37,7 +37,7 @@
         android:textStyle="bold"
         android:textSize="14sp"
         android:padding="8dp"
-        android:textColor="@color/whiteFont"/>
+        android:textColor="@color/white"/>
 
     <TextView
         android:id="@+id/placePickerItemDistance"

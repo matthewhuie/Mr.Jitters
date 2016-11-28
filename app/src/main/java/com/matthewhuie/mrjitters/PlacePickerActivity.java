@@ -137,6 +137,9 @@ public class PlacePickerActivity extends Activity
 
                         // Notifies the user of their current location
                         snapToPlace.setText("You're at " + fv.name + ". Here's some ☕ nearby.");
+
+                        // Resets the RecyclerView under the TextView
+                        placePicker.setPadding(0, snapToPlace.getHeight() + 8, 0, 0);
                     }
 
                     @Override
