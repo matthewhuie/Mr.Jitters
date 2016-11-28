@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_place_picker"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.matthewhuie.mrjitters.PlacePickerActivity"
     android:orientation="vertical">
 
-    <TextView
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/snapToPlace"
-        android:textAlignment="center"
-        android:padding="16dp"
-        android:textSize="16sp"
-        android:fontFamily="sans-serif" />
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/snapToPlace"
+            android:textAlignment="center"
+            android:padding="16dp"
+            android:textSize="16sp"
+            android:fontFamily="sans-serif" />
+
+    </android.support.v7.widget.CardView>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/coffeeList"
