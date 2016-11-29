@@ -85,19 +85,19 @@ public class PlacePickerAdapter extends RecyclerView.Adapter<PlacePickerAdapter.
         // Sets the proper rating colour, referenced from the Foursquare Brand Guide
         double ratingRaw = results.get(position).venue.rating;
         if (ratingRaw >= 9.0) {
-            holder.rating.setBackgroundColor(ContextCompat.getColor(context, R.color.MaterialKale));
+            holder.rating.setBackgroundColor(ContextCompat.getColor(context, R.color.FSQKale));
         } else if (ratingRaw >= 8.0) {
-            holder.rating.setBackgroundColor(ContextCompat.getColor(context, R.color.MaterialGuacamole));
+            holder.rating.setBackgroundColor(ContextCompat.getColor(context, R.color.FSQGuacamole));
         } else if (ratingRaw >= 7.0) {
-            holder.rating.setBackgroundColor(ContextCompat.getColor(context, R.color.MaterialLime));
+            holder.rating.setBackgroundColor(ContextCompat.getColor(context, R.color.FSQLime));
         } else if (ratingRaw >= 6.0) {
-            holder.rating.setBackgroundColor(ContextCompat.getColor(context, R.color.MaterialBanana));
+            holder.rating.setBackgroundColor(ContextCompat.getColor(context, R.color.FSQBanana));
         } else if (ratingRaw >= 5.0) {
-            holder.rating.setBackgroundColor(ContextCompat.getColor(context, R.color.MaterialOrange));
+            holder.rating.setBackgroundColor(ContextCompat.getColor(context, R.color.FSQOrange));
         } else if (ratingRaw >= 4.0) {
-            holder.rating.setBackgroundColor(ContextCompat.getColor(context, R.color.MaterialMacCheese));
+            holder.rating.setBackgroundColor(ContextCompat.getColor(context, R.color.FSQMacCheese));
         } else {
-            holder.rating.setBackgroundColor(ContextCompat.getColor(context, R.color.MaterialStrawberry));
+            holder.rating.setBackgroundColor(ContextCompat.getColor(context, R.color.FSQStrawberry));
         }
 
         // Sets each view with the appropriate venue details

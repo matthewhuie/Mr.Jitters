@@ -14,12 +14,4 @@
     <color name="FSQLime">#C5DE35</color>
     <color name="FSQGuacamole">#73CF42</color>
     <color name="FSQKale">#00B551</color>
-
-    <color name="MaterialStrawberry">#FF1744</color>
-    <color name="MaterialMacCheese">#FF3D00</color>
-    <color name="MaterialOrange">#FF9100</color>
-    <color name="MaterialBanana">#FFC400</color>
-    <color name="MaterialLime">#C6FF00</color>
-    <color name="MaterialGuacamole">#76FF03</color>
-    <color name="MaterialKale">#00E676</color>
 </resources>
